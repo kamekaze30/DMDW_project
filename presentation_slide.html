@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedPredict AI - Presentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            color: #1e293b;
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            padding: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+        }
+        
+        /* Slide 1 - Title */
+        .slide-1 {
+            text-align: center;
+        }
+        
+        .slide-1 .logo {
+            font-size: 8rem;
+            margin-bottom: 30px;
+        }
+        
+        .slide-1 h1 {
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-1 p {
+            font-size: 1.8rem;
+            color: #64748b;
+            font-weight: 300;
+        }
+        
+        /* Slide 2 - Infographic Stats */
+        .slide-2 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #1e293b;
+        }
+        
+        .infographic-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .info-card .icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+        }
+        
+        .info-card:nth-child(1) .icon { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+        .info-card:nth-child(2) .icon { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+        .info-card:nth-child(3) .icon { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+        .info-card:nth-child(4) .icon { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+        
+        .info-card .value {
+            font-size: 4rem;
+            font-weight: 800;
+        }
+        
+        .info-card:nth-child(1) .value { color: #2563eb; }
+        .info-card:nth-child(2) .value { color: #7c3aed; }
+        .info-card:nth-child(3) .value { color: #db2777; }
+        .info-card:nth-child(4) .value { color: #16a34a; }
+        
+        .info-card .label {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        
+        /* Slide 3 - Demographics */
+        .slide-3 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: #1e293b;
+        }
+        
+        .demographics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1100px;
+            width: 100%;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .demo-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Pie Chart */
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        .pie-chart svg {
+            transform: rotate(-90deg);
+        }
+        
+        .pie-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .bar-label {
+            width: 80px;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .bar-track {
+            flex: 1;
+            height: 30px;
+            background: #f1f5f9;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: width 1s ease;
+        }
+        
+        .bar-item:nth-child(1) .bar-fill { background: linear-gradient(90deg, #3b82f6, #60a5fa); width: 78.4%; }
+        .bar-item:nth-child(2) .bar-fill { background: linear-gradient(90deg, #8b5cf6, #a78bfa); width: 51.6%; }
+        .bar-item:nth-child(3) .bar-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); width: 43.4%; }
+        .bar-item:nth-child(4) .bar-fill { background: linear-gradient(90deg, #ef4444, #f87171); width: 53.1%; }
+        
+        /* Slide 4 - Understanding Diabetes */
+        .slide-4 {
+            max-width: 1000px;
+        }
+        
+        .slide-4 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            color: #1e293b;
+        }
+        
+        .diabetes-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .info-box {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .info-box .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .info-box p {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        /* Slides 5-7 - Health Metrics */
+        .slide-5 h2, .slide-6 h2, .slide-7 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            color: #1e293b;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid;
+        }
+        
+        .metric-card:nth-child(1) { border-color: #3b82f6; }
+        .metric-card:nth-child(2) { border-color: #8b5cf6; }
+        .metric-card:nth-child(3) { border-color: #ec4899; }
+        .metric-card:nth-child(4) { border-color: #10b981; }
+        
+        .metric-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .metric-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .metric-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Slide 8 - Risk Categories with Visuals */
+        .slide-8 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+            color: #1e293b;
+        }
+        
+        .risk-visual-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+            max-width: 1100px;
+        }
+        
+        .risk-visual-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .risk-visual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+        
+        .risk-visual-card.healthy::before { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .risk-visual-card.warning::before { background: linear-gradient(90deg, #eab308, #facc15); }
+        .risk-visual-card.critical::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+        
+        .risk-icon-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin: 0 auto 25px;
+        }
+        
+        .healthy .risk-icon-circle { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+        .warning .risk-icon-circle { background: linear-gradient(135deg, #fef9c3, #fde047); }
+        .critical .risk-icon-circle { background: linear-gradient(135deg, #fee2e2, #fecaca); }
+        
+        .risk-visual-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+        
+        .healthy h3 { color: #16a34a; }
+        .warning h3 { color: #ca8a04; }
+        .critical h3 { color: #dc2626; }
+        
+        .risk-range-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        
+        .healthy .risk-range-badge { background: #dcfce7; color: #16a34a; }
+        .warning .risk-range-badge { background: #fef9c3; color: #ca8a04; }
+        .critical .risk-range-badge { background: #fee2e2; color: #dc2626; }
+        
+        .risk-visual-card p {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* Slide 9 - How It Works Infographic */
+        .slide-9 h2 {
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            color: #1e293b;
+        }
+        
+        .process-flow {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            max-width: 1100px;
+        }
+        
+        .process-step {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number-circle {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        .process-step h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .process-step p {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .process-arrow {
+            font-size: 3rem;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+        
+        /* Slide 10 - ML Model & Thank You */
+        .slide-10 {
+            text-align: center;
+        }
+        
+        .slide-10 h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #1e293b;
+        }
+        
+        .model-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 900px;
+            margin-bottom: 40px;
+        }
+        
+        .model-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        
+        .model-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .model-card:nth-child(1) h3 { color: #2563eb; }
+        .model-card:nth-child(2) h3 { color: #7c3aed; }
+        
+        .model-card p, .model-card li {
+            color: #64748b;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        .model-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .model-card li {
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .model-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+            font-weight: bold;
+        }
+        
+        .thank-you-text {
+            font-size: 4rem;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            margin-top: 20px;
+        }
+        
+        .disclaimer-text {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 30px;
+            max-width: 800px;
+            text-align: left;
+            color: #1e40af;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        
+        .slide-counter span {
+            color: #3b82f6;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .infographic-container { grid-template-columns: 1fr; }
+            .demographics-grid { grid-template-columns: 1fr; }
+            .diabetes-info { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .risk-visual-container { grid-template-columns: 1fr; }
+            .model-grid { grid-template-columns: 1fr; }
+            .process-flow { flex-direction: column; }
+            .process-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="presentation">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide slide-1 active">
+            <div class="logo">🩺</div>
+            <h1>MedPredict AI</h1>
+            <p>Advanced Diabetes Risk Assessment Platform</p>
+        </div>
+        
+        <!-- Slide 2: Infographic Statistics -->
+        <div class="slide slide-2">
+            <h2>📊 Key Statistics</h2>
+            <div class="infographic-container">
+                <div class="info-card">
+                    <div class="icon">🎯</div>
+                    <div class="value">78%</div>
+                    <div class="label">Model Accuracy</div>
+                </div>
+                <div class="info-card">
+                    <div class="icon">📋</div>
+                    <div class="value">8</div>
+                    <div class="label">Health Features Analyzed</div>
+                </div>
+                <div class="info-card">
+                    <div class="icon">🧬</div>
+                    <div class="value">768</div>
+                    <div class="label">Training Samples</div>
+                </div>
+                <div class="info-card">
+                    <div class="icon">⚡</div>
+                    <div class="value">&lt;1s</div>
+                    <div class="label">Prediction Speed</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Demographics -->
+        <div class="slide slide-3">
+            <h2>👥 Dataset Demographics</h2>
+            <div class="demographics-grid">
+                <div class="demo-card">
+                    <h3>📊 Diabetes Distribution</h3>
+                    <div class="pie-chart">
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <!-- Background circle -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="30"/>
+                            <!-- Diabetes segment (34.9%) -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="30"
+                                stroke-dasharray="175 502" stroke-dashoffset="0"/>
+                            <!-- Non-diabetes segment (65.1%) -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#3b82f6" stroke-width="30"
+                                stroke-dasharray="327 502" stroke-dashoffset="-175"/>
+                        </svg>
+                    </div>
+                    <div class="pie-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #3b82f6;"></div>
+                            <span>Non-Diabetic (65.1%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ef4444;"></div>
+                            <span>Diabetic (34.9%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-card">
+                    <h3>📈 Diabetes Risk by Age Group</h3>
+                    <div class="bar-chart">
+                        <div class="bar-item">
+                            <div class="bar-label">Age &lt;30</div>
+                            <div class="bar-track">
+                                <div class="bar-fill">21.6%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Age 30-40</div>
+                            <div class="bar-track">
+                                <div class="bar-fill">48.4%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Age 40-50</div>
+                            <div class="bar-track">
+                                <div class="bar-fill">56.6%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="bar-label">Age 50+</div>
+                            <div class="bar-track">
+                                <div class="bar-fill">46.9%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Understanding Diabetes -->
+        <div class="slide slide-4">
+            <h2>🩺 Understanding Diabetes</h2>
+            <div class="diabetes-info">
+                <div class="info-box">
+                    <div class="icon">🍬</div>
+                    <h3>What is Diabetes?</h3>
+                    <p>A chronic condition affecting how your body turns food into energy. Blood sugar levels become elevated.</p>
+                </div>
+                <div class="info-box">
+                    <div class="icon">⚠️</div>
+                    <h3>Why It Matters</h3>
+                    <p>Can lead to heart disease, kidney failure, nerve damage, and blindness if left untreated.</p>
+                </div>
+                <div class="info-box">
+                    <div class="icon">🔍</div>
+                    <h3>Early Detection</h3>
+                    <p>Crucial for preventing complications. Lifestyle changes can prevent or delay type 2 diabetes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Demographics Features -->
+        <div class="slide slide-5">
+            <h2>👤 Demographic Features</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="icon">🤰</div>
+                    <h3>Pregnancies</h3>
+                    <p>Number of times pregnant. Gestational diabetes increases future risk significantly.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">🎂</div>
+                    <h3>Age</h3>
+                    <p>Average age: 33 years. Risk increases significantly after age 45.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">🧬</div>
+                    <h3>Diabetes Pedigree</h3>
+                    <p>Genetic influence score (0-3). Family history indicator of diabetes risk.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">⚖️</div>
+                    <h3>BMI</h3>
+                    <p>Average BMI: 32. Obesity is a major risk factor for diabetes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Blood Metrics -->
+        <div class="slide slide-6">
+            <h2>🩸 Blood & Physical Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="icon">💉</div>
+                    <h3>Glucose</h3>
+                    <p>Average: 121 mg/dL. Primary indicator. Normal: 70-100 mg/dL.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">💊</div>
+                    <h3>Insulin</h3>
+                    <p>2-Hour serum insulin (μU/mL). Marker for insulin resistance.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">❤️</div>
+                    <h3>Blood Pressure</h3>
+                    <p>Diastolic BP (mm Hg). Linked to metabolic syndrome.</p>
+                </div>
+                <div class="metric-card">
+                    <div class="icon">📐</div>
+                    <h3>Skin Thickness</h3>
+                    <p>Triceps skin fold (mm). Indicates body fat distribution.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Reference Ranges Infographic -->
+        <div class="slide slide-7">
+            <h2>📏 Reference Ranges</h2>
+            <div class="metrics-grid">
+                <div class="metric-card" style="border-color: #22c55e; background: linear-gradient(to bottom, white, #f0fdf4);">
+                    <div class="icon" style="font-size: 3rem;">✅</div>
+                    <h3 style="color: #16a34a;">Normal Glucose</h3>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #16a34a;">70-100 mg/dL</p>
+                </div>
+                <div class="metric-card" style="border-color: #eab308; background: linear-gradient(to bottom, white, #fefce8);">
+                    <div class="icon" style="font-size: 3rem;">⚡</div>
+                    <h3 style="color: #ca8a04;">Prediabetes</h3>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #ca8a04;">100-125 mg/dL</p>
+                </div>
+                <div class="metric-card" style="border-color: #ef4444; background: linear-gradient(to bottom, white, #fef2f2);">
+                    <div class="icon" style="font-size: 3rem;">⚠️</div>
+                    <h3 style="color: #dc2626;">Diabetes</h3>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #dc2626;">≥ 126 mg/dL</p>
+                </div>
+                <div class="metric-card" style="border-color: #3b82f6; background: linear-gradient(to bottom, white, #eff6ff);">
+                    <div class="icon" style="font-size: 3rem;">⚖️</div>
+                    <h3 style="color: #2563eb;">Healthy BMI</h3>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: #2563eb;">18.5 - 24.9</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Risk Categories -->
+        <div class="slide slide-8">
+            <h2>🎯 Risk Assessment Categories</h2>
+            <div class="risk-visual-container">
+                <div class="risk-visual-card healthy">
+                    <div class="risk-icon-circle">✅</div>
+                    <h3>HEALTHY</h3>
+                    <div class="risk-range-badge">Glucose &lt; 100 mg/dL</div>
+                    <p>Normal blood sugar levels. Continue healthy lifestyle with regular annual check-ups.</p>
+                </div>
+                <div class="risk-visual-card warning">
+                    <div class="risk-icon-circle">⚡</div>
+                    <h3>PRE-DIABETIC</h3>
+                    <div class="risk-range-badge">Glucose 100-125 mg/dL</div>
+                    <p>Elevated blood sugar. Action needed now to prevent diabetes. Lifestyle changes recommended.</p>
+                </div>
+                <div class="risk-visual-card critical">
+                    <div class="risk-icon-circle">⚠️</div>
+                    <h3>DIABETIC</h3>
+                    <div class="risk-range-badge">Glucose ≥ 126 mg/dL</div>
+                    <p>High blood sugar detected. Immediate medical attention required within 1 week.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 9: How It Works -->
+        <div class="slide slide-9">
+            <h2>🔄 How It Works</h2>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-number-circle">1</div>
+                    <h3>Input Data</h3>
+                    <p>Enter your 8 health metrics into the intuitive dashboard interface</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="step-number-circle">2</div>
+                    <h3>AI Analysis</h3>
+                    <p>Machine learning model processes and analyzes your health data instantly</p>
+                </div>
+                <div class="process-arrow">→</div>
+                <div class="process-step">
+                    <div class="step-number-circle">3</div>
+                    <h3>Get Results</h3>
+                    <p>Receive instant risk assessment with personalized health recommendations</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 10: ML Model & Thank You -->
+        <div class="slide slide-10">
+            <div class="disclaimer-text">
+                <strong>Disclaimer:</strong> This tool is for educational purposes only and not a substitute for professional medical advice. Always consult healthcare providers for medical decisions. Predictions are based on statistical models and should be interpreted cautiously.
+            </div>
+            <h2>🧠 Machine Learning Model</h2>
+            <div class="model-grid">
+                <div class="model-card">
+                    <h3>⚙️ Algorithm</h3>
+                    <p>Logistic Regression with StandardScaler preprocessing</p>
+                    <br>
+                    <p>Trained on Pima Indians Diabetes Dataset</p>
+                    <br>
+                    <p>80/20 train-test split (random state 42)</p>
+                </div>
+                <div class="model-card">
+                    <h3>✨ Key Features</h3>
+                    <ul>
+                        <li>Data imputation for missing values</li>
+                        <li>Standard scaling for all features</li>
+                        <li>Probability-based predictions</li>
+                        <li>Real-time risk categorization</li>
+                        <li>Interactive visualizations</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="thank-you-text">Thank You!</div>
+        </div>
+        
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="prevSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+    
+    <div class="slide-counter">
+        <span id="current">1</span> / <span id="total">10</span>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progressBar');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            slides[currentSlide - 1].classList.add('active');
+            document.getElementById('current').textContent = currentSlide;
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+        
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+        
+        // Initialize
+        document.getElementById('total').textContent = totalSlides;
+        showSlide(1);
+    </script>
+</body>
+</html>
